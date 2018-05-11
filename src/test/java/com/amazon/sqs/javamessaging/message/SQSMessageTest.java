@@ -28,6 +28,8 @@ import com.amazon.sqs.javamessaging.SQSSession;
 import com.amazon.sqs.javamessaging.acknowledge.Acknowledger;
 import com.amazon.sqs.javamessaging.message.SQSMessage;
 import com.amazonaws.services.sqs.model.MessageAttributeValue;
+
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -35,8 +37,7 @@ import javax.jms.Message;
 import javax.jms.MessageFormatException;
 import javax.jms.MessageNotWriteableException;
 
-import junit.framework.Assert;
-
+import java.nio.ByteBuffer;
 import java.util.*;
 
 /**
@@ -44,6 +45,8 @@ import java.util.*;
  */
 public class SQSMessageTest {
     private SQSSession mockSQSSession;
+    final String myNumber = "myNumber";
+    final String myBinary = "myBinary";
     final String myTrueBoolean = "myTrueBoolean";
     final String myFalseBoolean = "myFalseBoolean";
     final String myInteger = "myInteger";
@@ -67,65 +70,66 @@ public class SQSMessageTest {
         when(mockSQSSession.createMessage()).thenReturn(new SQSMessage());
         Message message = mockSQSSession.createMessage();
 
-        message.setBooleanProperty("myTrueBoolean", true);
-        message.setBooleanProperty("myFalseBoolean", false);
-        message.setIntProperty("myInteger", 100);
-        message.setDoubleProperty("myDouble", 2.1768);
-        message.setFloatProperty("myFloat", 3.1457f);
-        message.setLongProperty("myLong", 1290772974281L);
-        message.setShortProperty("myShort", (short) 123);
-        message.setByteProperty("myByteProperty", (byte) 'a');
-        message.setStringProperty("myString", "StringValue");
+        message.setBooleanProperty(myTrueBoolean, true);
+        message.setBooleanProperty(myFalseBoolean, false);
+        message.setIntProperty(myInteger, 100);
+        message.setDoubleProperty(myDouble, 2.1768);
+        message.setFloatProperty(myFloat, 3.1457f);
+        message.setLongProperty(myLong, 1290772974281L);
+        message.setShortProperty(myShort, (short) 123);
+        message.setByteProperty(myByte, (byte) 'a');
+        message.setStringProperty(myString, "StringValue");
 
-        Assert.assertTrue(message.propertyExists("myTrueBoolean"));
-        Assert.assertEquals(message.getObjectProperty("myTrueBoolean"), true);
-        Assert.assertEquals(message.getBooleanProperty("myTrueBoolean"), true);
+        Assert.assertTrue(message.propertyExists(myTrueBoolean));
+        Assert.assertEquals(message.getObjectProperty(myTrueBoolean), true);
+        Assert.assertEquals(message.getBooleanProperty(myTrueBoolean), true);
         
-        Assert.assertTrue(message.propertyExists("myFalseBoolean"));
-        Assert.assertEquals(message.getObjectProperty("myFalseBoolean"), false);
-        Assert.assertEquals(message.getBooleanProperty("myFalseBoolean"), false);
+        Assert.assertTrue(message.propertyExists(myFalseBoolean));
+        Assert.assertEquals(message.getObjectProperty(myFalseBoolean), false);
+        Assert.assertEquals(message.getBooleanProperty(myFalseBoolean), false);
         
-        Assert.assertTrue(message.propertyExists("myInteger"));
-        Assert.assertEquals(message.getObjectProperty("myInteger"), 100);
-        Assert.assertEquals(message.getIntProperty("myInteger"), 100);
+        Assert.assertTrue(message.propertyExists(myInteger));
+        Assert.assertEquals(message.getObjectProperty(myInteger), 100);
+        Assert.assertEquals(message.getIntProperty(myInteger), 100);
         
-        Assert.assertTrue(message.propertyExists("myDouble"));
-        Assert.assertEquals(message.getObjectProperty("myDouble"), 2.1768);
-        Assert.assertEquals(message.getDoubleProperty("myDouble"), 2.1768);
+        Assert.assertTrue(message.propertyExists(myDouble));
+        Assert.assertEquals((double)message.getObjectProperty(myDouble), 2.1768, 0);
+        Assert.assertEquals(message.getDoubleProperty(myDouble), 2.1768, 0);
         
-        Assert.assertTrue(message.propertyExists("myFloat"));
-        Assert.assertEquals(message.getObjectProperty("myFloat"), 3.1457f);
-        Assert.assertEquals(message.getFloatProperty("myFloat"), 3.1457f);
+        Assert.assertTrue(message.propertyExists(myFloat));
+        Assert.assertEquals((float)message.getObjectProperty(myFloat), 3.1457f, 0);
+        Assert.assertEquals(message.getFloatProperty(myFloat), 3.1457f, 0);
         
-        Assert.assertTrue(message.propertyExists("myLong"));
-        Assert.assertEquals(message.getObjectProperty("myLong"), 1290772974281L);
-        Assert.assertEquals(message.getLongProperty("myLong"), 1290772974281L);
+        Assert.assertTrue(message.propertyExists(myLong));
+        Assert.assertEquals(message.getObjectProperty(myLong), 1290772974281L);
+        Assert.assertEquals(message.getLongProperty(myLong), 1290772974281L);
         
-        Assert.assertTrue(message.propertyExists("myShort"));
-        Assert.assertEquals(message.getObjectProperty("myShort"), (short) 123);
-        Assert.assertEquals(message.getShortProperty("myShort"), (short) 123);
+        Assert.assertTrue(message.propertyExists(myShort));
+        Assert.assertEquals(message.getObjectProperty(myShort), (short) 123);
+        Assert.assertEquals(message.getShortProperty(myShort), (short) 123);
         
-        Assert.assertTrue(message.propertyExists("myByteProperty"));
-        Assert.assertEquals(message.getObjectProperty("myByteProperty"), (byte) 'a');
-        Assert.assertEquals(message.getByteProperty("myByteProperty"), (byte) 'a');
+        Assert.assertTrue(message.propertyExists(myByte));
+        Assert.assertEquals(message.getObjectProperty(myByte), (byte) 'a');
+        Assert.assertEquals(message.getByteProperty(myByte), (byte) 'a');
         
-        Assert.assertTrue(message.propertyExists("myString"));
-        Assert.assertEquals(message.getObjectProperty("myString"), "StringValue");
-        Assert.assertEquals(message.getStringProperty("myString"), "StringValue");
+        Assert.assertTrue(message.propertyExists(myString));
+        Assert.assertEquals(message.getObjectProperty(myString), "StringValue");
+        Assert.assertEquals(message.getStringProperty(myString), "StringValue");
 
         // Validate property names
         Set<String> propertyNamesSet = new HashSet<String>(Arrays.asList(
-                "myTrueBoolean",
-                "myFalseBoolean",
-                "myInteger",
-                "myDouble",
-                "myFloat",
-                "myLong",
-                "myShort",
-                "myByteProperty",
-                "myString"));
+                myTrueBoolean,
+                myFalseBoolean,
+                myInteger,
+                myDouble,
+                myFloat,
+                myLong,
+                myShort,
+                myByte,
+                myString));
 
-        Enumeration<String > propertyNames = message.getPropertyNames();
+        @SuppressWarnings("unchecked")
+		Enumeration<String> propertyNames = message.getPropertyNames();
         int counter = 0;
         while (propertyNames.hasMoreElements()) {
             assertTrue(propertyNamesSet.contains(propertyNames.nextElement()));
@@ -134,14 +138,9 @@ public class SQSMessageTest {
         assertEquals(propertyNamesSet.size(), counter);
         
         message.clearProperties();
-        Assert.assertFalse(message.propertyExists("myTrueBoolean"));
-        Assert.assertFalse(message.propertyExists("myInteger"));
-        Assert.assertFalse(message.propertyExists("myDouble"));
-        Assert.assertFalse(message.propertyExists("myFloat"));
-        Assert.assertFalse(message.propertyExists("myLong"));
-        Assert.assertFalse(message.propertyExists("myShort"));
-        Assert.assertFalse(message.propertyExists("myByteProperty"));
-        Assert.assertFalse(message.propertyExists("myString"));
+        for (String propName: propertyNamesSet) {
+        	Assert.assertFalse(message.propertyExists(propName));
+        }
 
         propertyNames = message.getPropertyNames();
         assertFalse(propertyNames.hasMoreElements());
@@ -272,11 +271,22 @@ public class SQSMessageTest {
 
         Acknowledger ack = mock(Acknowledger.class);
 
+        final ByteBuffer binaryValue = ByteBuffer.wrap(new byte[] {(byte)0xDE, (byte)0xAD, (byte)0xBE, (byte)0xEF});
+        
         Map<String,String> systemAttributes = new HashMap<String, String>();
         systemAttributes.put(APPROXIMATE_RECEIVE_COUNT, "100");
 
         Map<String, MessageAttributeValue> messageAttributes = new HashMap<String, MessageAttributeValue>();
 
+        /* SQS Supports Logical Data Types: String, Number, and Binary so we'd best know what to do with those at the very minimum! */
+        messageAttributes.put(myNumber, new MessageAttributeValue()
+        		.withDataType(SQSMessagingClientConstants.NUMBER)
+        		.withStringValue("4"));
+        messageAttributes.put(myBinary, new MessageAttributeValue()
+        		.withDataType(SQSMessagingClientConstants.BINARY)
+        		.withBinaryValue(binaryValue));
+
+        
         messageAttributes.put(myTrueBoolean, new MessageAttributeValue()
                                                     .withDataType(SQSMessagingClientConstants.BOOLEAN)
                                                     .withStringValue("1"));
@@ -312,6 +322,7 @@ public class SQSMessageTest {
         messageAttributes.put(myString, new MessageAttributeValue()
                                                     .withDataType(SQSMessagingClientConstants.STRING)
                                                     .withStringValue("StringValue"));
+        
 
         com.amazonaws.services.sqs.model.Message sqsMessage = new com.amazonaws.services.sqs.model.Message()
                 .withMessageAttributes(messageAttributes)
@@ -321,6 +332,14 @@ public class SQSMessageTest {
 
         SQSMessage message = new SQSMessage(ack, "QueueUrl", sqsMessage);
 
+        // SQS "Number" data type must use StringValue, may be a floating point number
+        Assert.assertTrue(message.propertyExists(myNumber));
+        Assert.assertEquals(4.0, (double)message.getObjectProperty(myNumber), 0);
+        Assert.assertEquals(4.0, message.getDoubleProperty(myNumber), 0);
+        
+        Assert.assertTrue(message.propertyExists(myBinary));
+        Assert.assertEquals(binaryValue, message.getObjectProperty(myBinary));
+        
         Assert.assertTrue(message.propertyExists(myTrueBoolean));
         Assert.assertEquals(message.getObjectProperty(myTrueBoolean), true);
         Assert.assertEquals(message.getBooleanProperty(myTrueBoolean), true);
@@ -334,12 +353,12 @@ public class SQSMessageTest {
         Assert.assertEquals(message.getIntProperty(myInteger), 100);
 
         Assert.assertTrue(message.propertyExists(myDouble));
-        Assert.assertEquals(message.getObjectProperty(myDouble), 2.1768);
-        Assert.assertEquals(message.getDoubleProperty(myDouble), 2.1768);
+        Assert.assertEquals((double)message.getObjectProperty(myDouble), 2.1768, 0);
+        Assert.assertEquals(message.getDoubleProperty(myDouble), 2.1768, 0);
 
         Assert.assertTrue(message.propertyExists(myFloat));
-        Assert.assertEquals(message.getObjectProperty(myFloat), 3.1457f);
-        Assert.assertEquals(message.getFloatProperty(myFloat), 3.1457f);
+        Assert.assertEquals((float)message.getObjectProperty(myFloat), 3.1457f, 0);
+        Assert.assertEquals(message.getFloatProperty(myFloat), 3.1457f, 0);
 
         Assert.assertTrue(message.propertyExists(myLong));
         Assert.assertEquals(message.getObjectProperty(myLong), 1290772974281L);
@@ -360,6 +379,8 @@ public class SQSMessageTest {
 
         // Validate property names
         Set<String> propertyNamesSet = new HashSet<String>(Arrays.asList(
+        		myBinary,
+        		myNumber,
                 myTrueBoolean,
                 myFalseBoolean,
                 myInteger,
@@ -374,7 +395,8 @@ public class SQSMessageTest {
         Enumeration<String > propertyNames = message.getPropertyNames();
         int counter = 0;
         while (propertyNames.hasMoreElements()) {
-            assertTrue(propertyNamesSet.contains(propertyNames.nextElement()));
+        	String propName = propertyNames.nextElement();
+            Assert.assertTrue("Found Unknown Property: " + propName, propertyNamesSet.contains(propName));
             counter++;
         }
         assertEquals(propertyNamesSet.size(), counter);

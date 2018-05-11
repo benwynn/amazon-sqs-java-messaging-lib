@@ -31,6 +31,14 @@ public class SQSMessagingClientConstants {
     public static final int MIN_PREFETCH = 0;
 
     /**
+     * SQS Message Attribute data types which we had better support.
+     * https://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/sqs-message-attributes.html
+     */
+    public static final String NUMBER = "Number";
+    
+    public static final String BINARY = "Binary";
+    
+    /**
      * JMSMessage available user property types, which are mapped to message
      * attribute data types
      */
